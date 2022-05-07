@@ -1,7 +1,7 @@
 import { Component } from 'react';
 import s from './Form.module.css';
 import { FaPhone, FaRegUser } from 'react-icons/fa';
-import { Notify } from 'notiflix';
+import PropTypes from 'prop-types';
 
 export default class Form extends Component {
   state = {
@@ -19,10 +19,11 @@ export default class Form extends Component {
   onSubmit = e => {
     e.preventDefault();
     const { name, number } = this.state;
-    if (this.props.checkContact(name)) {
-      return Notify.failure(`${name} is already in contacts list`);
-    }
     this.props.addContact({ name, number });
+    this.setState({
+      name: '',
+      number: '',
+    });
   };
 
   render() {
@@ -58,3 +59,7 @@ export default class Form extends Component {
     );
   }
 }
+
+Form.propTypes = {
+  addContact: PropTypes.func.isRequired,
+};

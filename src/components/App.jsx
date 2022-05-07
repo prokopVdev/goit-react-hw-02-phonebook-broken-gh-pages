@@ -1,5 +1,6 @@
 import { Component } from 'react';
 import { nanoid } from 'nanoid';
+import { Notify } from 'notiflix';
 import Form from './Form';
 import Contacts from './Contacts';
 import Container from './Container';
@@ -17,6 +18,9 @@ export default class App extends Component {
   };
 
   addContact = info => {
+    if (this.checkContact(info.name)) {
+      return Notify.failure(`${info.name} is already in contacts list`);
+    }
     this.setState(({ contacts }) => ({
       contacts: [{ ...info, id: nanoid() }, ...contacts],
     }));
@@ -53,7 +57,7 @@ export default class App extends Component {
     return (
       <>
         <Container title="Phonebook">
-          <Form checkContact={this.checkContact} addContact={this.addContact} />
+          <Form addContact={this.addContact} />
         </Container>
         <Container title="Contacts">
           <Filter value={filter} onChange={this.changeFilter} />
